@@ -84,6 +84,32 @@ tmplConfigurable<FilePath_t>     gConfigs::InputFile(
             enuConfigSource::Arg  |
             enuConfigSource::File));
 
+tmplConfigurable<double>     gConfigs::FastTextThreshold(
+        gConfigs::appConfig("FastTextThreshold"),
+        "Threshold to be used by classifier",
+        0.8,
+        ReturnTrueCrossValidator(),
+        "",
+        "",
+        "fasttext-threshold",
+        (enuConfigSource::Type)(
+            enuConfigSource::Arg  |
+            enuConfigSource::File));
+
+tmplConfigurable<FilePath_t>     gConfigs::FastTextModelPath(
+        gConfigs::appConfig("FastTextModelPath"),
+        "Directory where FastText models are stored.",
+        "",
+        Validators::tmplPathAccessValidator<
+        (enuPathAccess::Type)(enuPathAccess::Dir | enuPathAccess::Readable),
+        false>,
+        "",
+        "",
+        "fasttext-models-path",
+        (enuConfigSource::Type)(
+            enuConfigSource::Arg  |
+            enuConfigSource::File));
+
 tmplConfigurable<FilePath_t>     gConfigs::InputDir(
         gConfigs::appConfig("InputDir"),
         "Input directory to convert. Relative to config file path unless specified as absolute path.",
@@ -170,6 +196,7 @@ tmplConfigurable<bool>     gConfigs::NoSpellcorrector(
         (enuConfigSource::Type)(
             enuConfigSource::Arg  |
             enuConfigSource::File));
+
 
 tmplConfigurable<bool>     gConfigs::Recursive(
         gConfigs::appConfig("Recursive"),

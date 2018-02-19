@@ -29,6 +29,7 @@
 #include "libTargomanCommon/CmdIO.h"
 #include "libTargomanCommon/Configuration/intfRPCExporter.hpp"
 #include "libTargomanCommon/JSONConversationProtocol.h"
+#include "fastText/src/fasttext.h"
 
 namespace Targoman {
 namespace Apps {
@@ -60,11 +61,15 @@ private slots:
     Common::Configuration::stuRPCOutput rpcText2IXML(const QVariantMap&);
     Common::Configuration::stuRPCOutput rpcIXML2Text(const QVariantMap&);
     Common::Configuration::stuRPCOutput rpcTokenize(const QVariantMap&);
+    Common::Configuration::stuRPCOutput rpcPreprocessText(const QVariantMap &_args);
 
 private:
     void processDir(const QString& _dir, const QString &_basePath);
     void processFile(const QString &_inputFile, const QString& _outFile);
     QStringList retrieveFileItems(const QString& _filePath);
+    std::tuple<bool, QString> text2Ixml_Helper(const QVariantList &_temovalItems,
+                            bool _useSpellCorrector, QString _language, QString _text);
+    QString detectFormality(QString _lang, QString _text);
 };
 
 }

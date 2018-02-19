@@ -41,6 +41,7 @@ TARGOMAN_DEFINE_ENHANCED_ENUM(enuAppMode,
                               Tokenize,
                               IXML2Text,
                               Validate,
+                              Preprocess,
                               Server
                               );
 }
@@ -60,6 +61,8 @@ public:
     static Common::Configuration::tmplConfigurable<enuAppMode::Type>    Mode;
     static Common::Configuration::tmplConfigurable<QString>             Input;
     static Common::Configuration::tmplConfigurable<QString>             Language;
+    static Common::Configuration::tmplConfigurable<double>              FastTextThreshold;
+    static Common::Configuration::tmplConfigurable<FilePath_t>          FastTextModelPath;
     static Common::Configuration::tmplConfigurable<FilePath_t>          InputFile;
     static Common::Configuration::tmplConfigurable<FilePath_t>          InputDir;
     static Common::Configuration::tmplConfigurable<FilePath_t>          OutputPath;

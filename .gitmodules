@@ -1,0 +1,6 @@
+[submodule "fastText"]
+	path = fastText
+	url = https://github.com/facebookresearch/fastText.git
+[submodule "TextProcessor"]
+	path = TextProcessor
+	url = https://github.com/Targoman/TextProcessor.git

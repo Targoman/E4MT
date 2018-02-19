@@ -24,14 +24,34 @@ BasePath = "."
 HEADERS += \
     src/appE4MT.h \
     src/Configs.h \
-    src/XMLReader.h
+    src/XMLReader.h \
+    fastText/src/dictionary.h \
+    fastText/src/args.h \
+    fastText/src/dictionary.h \
+    fastText/src/fasttext.h \
+    fastText/src/matrix.h \
+    fastText/src/model.h \
+    fastText/src/productquantizer.h \
+    fastText/src/qmatrix.h \
+    fastText/src/real.h \
+    fastText/src/utils.h \
+    fastText/src/vector.h
 
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
 SOURCES += \
     src/main.cpp \
     src/appE4MT.cpp \
     src/Configs.cpp \
-    src/XMLReader.cpp
+    src/XMLReader.cpp \
+    fastText/src/args.cc \
+    fastText/src/dictionary.cc \
+    fastText/src/fasttext.cc \
+    fastText/src/matrix.cc \
+    fastText/src/model.cc \
+    fastText/src/productquantizer.cc \
+    fastText/src/qmatrix.cc \
+    fastText/src/utils.cc \
+    fastText/src/vector.cc
 
 DependencySearchPaths+=/usr/lib/x86_64-linux-gnu/ # to fix buggy installation location of libxml2 on ubunut and mint
 INCLUDEPATH+=/usr/include/libxml2/ # to fix buggy installation location of libxml2 on ubunut and mint

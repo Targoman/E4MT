@@ -1,0 +1,5 @@
+
+{"r":{"login":["mehran","1"]}}
+{"r":{"rpcText2IXML":{"txt":"this is a test.", "lang":"en", "spell":false}}}
+{"r":{"rpcIXML2Text":{"txt":"this is a test.", "lang":"en", "spell":false}}}
+{"r":{"rpcPreprocess":{"txt":"this is a test.", "lang":"en", "spell":false}}}

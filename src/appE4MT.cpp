@@ -22,11 +22,13 @@
  * @author S. Mohammad M. Ziabary <ziabary@targoman.com>
  */
 
+#include <iostream>
+#include <sstream>
+
 #include "appE4MT.h"
 #include "libTargomanTextProcessor/TextProcessor.h"
 #include "XMLReader.h"
 #include "Configs.h"
-#include <iostream>
 
 namespace Targoman {
 namespace Apps {
@@ -36,6 +38,7 @@ using namespace Common;
 using namespace Common::Configuration;
 
 thread_local static QList<stuIXMLReplacement> SentenceBreakReplacements;
+thread_local static QMap<QString, QSharedPointer<fasttext::FastText>> gFastText;
 
 void appE4MT::slotExecute()
 {
@@ -81,7 +84,19 @@ void appE4MT::slotExecute()
                     std::cout<<TargomanTextProcessor::instance().ixml2Text(
                                    gConfigs::Input.value()).toUtf8().constData()<<std::endl;
                     break;
-                case enuAppMode::Tokenize:
+
+                case enuAppMode::Preprocess:{
+                    QString Normalized = std::get<1>(this->text2Ixml_Helper(
+                                   QVariantList(),
+                                   (gConfigs::NoSpellcorrector.value() ? false : true),
+                                   gConfigs::Language.value(),
+                                   gConfigs::Input.value()
+                                   ));
+                    std::cout<<this->detectFormality(gConfigs::Language.value(), Normalized).toUtf8().constData()
+                             << "\t"
+                             << Normalized.toUtf8().constData()<<std::endl;
+                    break;
+                }case enuAppMode::Tokenize:
                     std::cout<<TargomanTextProcessor::instance().ixml2Text(
                                    TargomanTextProcessor::instance().text2IXML(
                                        gConfigs::Input.value(),
@@ -139,16 +154,53 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcNormalize(const QVaria
     return stuRPCOutput(Text, Args);
 }
 
-Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcText2IXML(const QVariantMap &_args)
+QString appE4MT::detectFormality(QString _lang, QString _text)
 {
-    QString Text     = _args.value("txt").toString();
-    QString Language = _args.value("lang").toString();
-    bool    UseSpellCorrector = _args.value("spell",false).toBool();
+    QSharedPointer<fasttext::FastText>& FastTextInstance = gFastText[_lang];
+    if(!FastTextInstance){
+        FastTextInstance.reset(new fasttext::FastText);
+        FastTextInstance->loadModel((gConfigs::FastTextModelPath.value() + _lang).toStdString());
+    }
 
-    if (Text.isEmpty())
+    QString Text2Classify = _text;
+
+    std::stringstream SS;
+    SS<<Text2Classify.replace("\n"," ").toUtf8().constData()<<"\n";
+    SS.flush();
+
+    std::vector<std::pair<fasttext::real,std::string>> Predictions;
+    FastTextInstance->predict(SS, 1, Predictions, gConfigs::FastTextThreshold.value());
+
+    return Predictions[0].second.c_str();
+}
+
+Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const QVariantMap &_args){
+    QString Text;
+    QString Lang = _args.value("lang").toString();
+    bool WasSpellCorrected;
+
+    std::tie(WasSpellCorrected, Text) = this->text2Ixml_Helper(
+                _args.value("rem").toList(),
+                _args.value("spell",false).toBool(),
+                Lang,
+                _args.value("txt").toString());
+
+
+    QVariantMap Args;
+    Args.insert("spell",WasSpellCorrected);
+    Args.insert("isFormal", detectFormality(Lang, Text) );
+    return stuRPCOutput(Text, Args);
+}
+
+std::tuple<bool, QString> appE4MT::text2Ixml_Helper(const QVariantList &_removalItems,
+                               bool _useSpellCorrector,
+                               QString _language,
+                               QString _text)
+{
+    if (_text.isEmpty())
         throw exAppE4MT("Invalid empty text");
     QList<enuTextTags::Type> RemovingTags;
-    foreach(const QVariant& TagVariant, _args.value("rem").toList()){
+    foreach(const QVariant& TagVariant, _removalItems){
         enuTextTags::Type Tag = enuTextTags::toEnum(TagVariant.toString());
         if (Tag == enuTextTags::Unknown)
             throw exAppE4MT("Invalid Tag: " + TagVariant.toString());
@@ -156,14 +208,29 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcText2IXML(const QVaria
     }
 
     bool WasSpellCorrected;
-    Text = TargomanTextProcessor::instance().text2IXML(Text,
+    _text = TargomanTextProcessor::instance().text2IXML(_text,
                                                        WasSpellCorrected,
-                                                       Language,
+                                                       _language,
                                                        0,
                                                        false,
-                                                       UseSpellCorrector,
+                                                       _useSpellCorrector,
                                                        RemovingTags,
                                                        SentenceBreakReplacements);
+
+    return std::make_tuple(WasSpellCorrected, _text);
+}
+
+Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcText2IXML(const QVariantMap &_args)
+{
+    QString Text;
+    bool WasSpellCorrected;
+
+    std::tie(WasSpellCorrected, Text) = this->text2Ixml_Helper(
+                _args.value("rem").toList(),
+                _args.value("spell",false).toBool(),
+                _args.value("lang").toString(),
+                _args.value("txt").toString());
+
     QVariantMap Args;
     Args.insert("spell",WasSpellCorrected);
     return stuRPCOutput(Text, Args);
