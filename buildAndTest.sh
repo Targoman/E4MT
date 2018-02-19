@@ -69,6 +69,7 @@ installTargomanProject TextProcessor $1 $2
 if [ $? -ne 0 ]; then
    exit
 fi
+echo "listing output"
 find $BaseOutput
 
 echo "Building Module"
