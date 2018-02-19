@@ -18,6 +18,6 @@
    along with Targoman. If not, see <http://www.gnu.org/licenses/>.
 
                                                                              -->
-#  Targoman text processor library and application
+#  E4MT application
 
 This repository has been forked from old TargomanSMT bundle in oder to be developed and maintained separately.
