@@ -7,7 +7,7 @@ RUN apk add --virtual .build-dependencies --no-cache gcc g++ make qt5-qtbase-dev
     && ln -s /lib/libz.so /usr/lib/ \
     && git clone -b $(curl -s https://api.github.com/repos/Targoman/E4MT/releases/latest | grep tag_name | cut -d ':' -f 2 | sed 's/[\", ]//g') --recursive --single-branch https://github.com/Targoman/E4MT.git \
     && cd /tmp/E4MT && bash ./buildAndTest.sh full release /tmp/local \
-    && make install; echo \
+    && make install \
     && mkdir -p /etc/E4MT/FastTextModels \
     && mv /tmp/local/bin/* /usr/bin \
     && mv /tmp/local/lib/* /usr/lib \
@@ -21,4 +21,4 @@ VOLUME /etc/E4MT/FastTextModels
 
 EXPOSE 10000
 
-ENTRYPOINT [ "E4MT", "-c","/etc/E4MT/E4MT.server.conf","-l", "en", "-m", "Server", "--admin-mode", "LegacyTcp" ]
+ENTRYPOINT [ "E4MT", "-c","/etc/E4MT/E4MT.server.conf" ]
