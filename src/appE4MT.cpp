@@ -171,7 +171,10 @@ QString appE4MT::detectFormality(QString _lang, QString _text)
     std::vector<std::pair<fasttext::real,std::string>> Predictions;
     FastTextInstance->predict(SS, 1, Predictions, gConfigs::FastTextThreshold.value());
 
-    return Predictions[0].second.c_str();
+    if(Predictions.size())
+        return Predictions[0].second.c_str();
+    else
+        return "__label__formal";
 }
 
 Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const QVariantMap &_args){
@@ -188,7 +191,7 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const Q
 
     QVariantMap Args;
     Args.insert("spell",WasSpellCorrected);
-    Args.insert("isFormal", detectFormality(Lang, Text) );
+    Args.insert("formality", detectFormality(Lang, Text) );
     return stuRPCOutput(Text, Args);
 }
 
