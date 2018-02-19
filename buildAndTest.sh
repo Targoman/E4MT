@@ -130,7 +130,7 @@ fi
 
 
 popd
-
+exit 0 
 #cd "$BasePath"
 #mkdir -p ./out/scripts
 #for Path in ./Scripts/*; do
