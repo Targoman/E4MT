@@ -125,8 +125,6 @@ fi
 
 popd
 
-echo "built successfully"
-exit 0
 #cd "$BasePath"
 #mkdir -p ./out/scripts
 #for Path in ./Scripts/*; do
