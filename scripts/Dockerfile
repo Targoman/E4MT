@@ -5,10 +5,10 @@ WORKDIR /tmp
 RUN mkdir -p /etc/E4MT
 RUN apk update && apk upgrade \
     && apk add --no-cache bash sed grep coreutils qt5-qtbase zlib libxml2 \
-    && apk add --virtual .build-dependencies --no-cache gcc g++ make qt5-qtbase-dev zlib-dev libxml2-dev \
+    && apk add --virtual .build-dependencies --no-cache gcc g++ make qt5-qtbase-dev zlib-dev libxml2-dev curl git \
     && ln -s /lib/libz.so /usr/lib/ \
     && git clone -b $(curl -s https://api.github.com/repos/Targoman/E4MT/releases/latest | grep tag_name | cut -d ':' -f 2 | sed 's/[\", ]//g') --recursive --single-branch https://github.com/Targoman/E4MT.git \
-    && cd E4MT  && ./buildAndTest.sh full release && make install && cd .. \
+    && bash (cd E4MT  && ./buildAndTest.sh full release && make install)
     && apk del .build-dependencies
 
 RUN mv ~/local/bin/* /usr/bin \
