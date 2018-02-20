@@ -169,13 +169,19 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcNormalize(const QVaria
 Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const QVariantMap &_args){
     QString Text;
     QString Lang = _args.value("lang").toString();
-    bool WasSpellCorrected;
+    bool WasSpellCorrected = false;
 
-    std::tie(WasSpellCorrected, Text) = this->text2Ixml_Helper(
-                _args.value("rem").toList(),
-                _args.value("spell",false).toBool(),
-                Lang,
-                _args.value("txt").toString());
+    foreach(const QString& Paragraph, _args.value("txt").toString().split("\n")){
+        QString Normalized;
+        bool SpellCorrected;
+        std::tie(SpellCorrected, Normalized) = this->text2Ixml_Helper(
+                    _args.value("rem").toList(),
+                    _args.value("spell",false).toBool(),
+                    Lang,
+                    Paragraph);
+        WasSpellCorrected |= SpellCorrected;
+        Text+=Normalized + "\n";
+    }
 
     QVariantMap Args;
     Args.insert("spell",WasSpellCorrected);
