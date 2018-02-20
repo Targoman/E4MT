@@ -75,7 +75,6 @@ if [ $? -ne 0 ]; then
    exit
 fi
 
-
 echo "Building Module"
 #TODO -Werror
 
@@ -130,9 +129,4 @@ fi
 
 
 popd
-exit 0 
-#cd "$BasePath"
-#mkdir -p ./out/scripts
-#for Path in ./Scripts/*; do
-#  ln -snf "../../$Path" "./out/scripts/${Path#./Scripts/}"
-#done
+exit 0

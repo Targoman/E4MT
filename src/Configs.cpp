@@ -110,6 +110,18 @@ tmplConfigurable<FilePath_t>     gConfigs::FastTextModelPath(
             enuConfigSource::Arg  |
             enuConfigSource::File));
 
+tmplConfigurable<QString> gConfigs::FastTextModelPattern(
+        gConfigs::appConfig("FastTextModelPattern"),
+        "File pattern for FastText models must have <%LANG%> pattern as language placeholder",
+        "fasttext-%LANG%.bin",
+        ReturnTrueCrossValidator(),
+        "",
+        "",
+        "fasttext-model-pattrn",
+        (enuConfigSource::Type)(
+            enuConfigSource::Arg  |
+            enuConfigSource::File));
+
 tmplConfigurable<FilePath_t>     gConfigs::InputDir(
         gConfigs::appConfig("InputDir"),
         "Input directory to convert. Relative to config file path unless specified as absolute path.",

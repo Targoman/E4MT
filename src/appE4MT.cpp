@@ -38,7 +38,7 @@ using namespace Common;
 using namespace Common::Configuration;
 
 thread_local static QList<stuIXMLReplacement> SentenceBreakReplacements;
-thread_local static QMap<QString, QSharedPointer<fasttext::FastText>> gFastText;
+
 
 void appE4MT::slotExecute()
 {
@@ -61,6 +61,7 @@ void appE4MT::slotExecute()
                     &appE4MT::slotPong,
                     Qt::DirectConnection);
             TargomanTextProcessor::instance().init(ConfigManager::instance().configSettings());
+            FormalityChecker.reset(new clsFormalityChecker);
             ConfigManager::instance().startAdminServer();
             return;
         }else{
@@ -86,13 +87,14 @@ void appE4MT::slotExecute()
                     break;
 
                 case enuAppMode::Preprocess:{
+                    FormalityChecker.reset(new clsFormalityChecker);
                     QString Normalized = std::get<1>(this->text2Ixml_Helper(
                                    QVariantList(),
                                    (gConfigs::NoSpellcorrector.value() ? false : true),
                                    gConfigs::Language.value(),
                                    gConfigs::Input.value()
                                    ));
-                    std::cout<<this->detectFormality(gConfigs::Language.value(), Normalized).toUtf8().constData()
+                    std::cout<<FormalityChecker->check(gConfigs::Language.value(), Normalized).toUtf8().constData()
                              << "\t"
                              << Normalized.toUtf8().constData()<<std::endl;
                     break;
@@ -154,29 +156,6 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcNormalize(const QVaria
     return stuRPCOutput(Text, Args);
 }
 
-QString appE4MT::detectFormality(QString _lang, QString _text)
-{
-    QSharedPointer<fasttext::FastText>& FastTextInstance = gFastText[_lang];
-    if(!FastTextInstance){
-        FastTextInstance.reset(new fasttext::FastText);
-        FastTextInstance->loadModel((gConfigs::FastTextModelPath.value() + _lang).toStdString());
-    }
-
-    QString Text2Classify = _text;
-
-    std::stringstream SS;
-    SS<<Text2Classify.replace("\n"," ").toUtf8().constData()<<"\n";
-    SS.flush();
-
-    std::vector<std::pair<fasttext::real,std::string>> Predictions;
-    FastTextInstance->predict(SS, 1, Predictions, gConfigs::FastTextThreshold.value());
-
-    if(Predictions.size())
-        return Predictions[0].second.c_str();
-    else
-        return "__label__formal";
-}
-
 Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const QVariantMap &_args){
     QString Text;
     QString Lang = _args.value("lang").toString();
@@ -191,7 +170,7 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const Q
 
     QVariantMap Args;
     Args.insert("spell",WasSpellCorrected);
-    Args.insert("formality", detectFormality(Lang, Text) );
+    Args.insert("formality", this->FormalityChecker->check(Lang, Text));
     return stuRPCOutput(Text, Args);
 }
 
