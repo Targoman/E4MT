@@ -111,7 +111,7 @@ tmplConfigurable<FilePath_t>     gConfigs::FastTextModelPath(
             enuConfigSource::File));
 
 tmplConfigurable<QString> gConfigs::FastTextModelPattern(
-        gConfigs::appConfig("Input"),
+        gConfigs::appConfig("FastTextModelPattern"),
         "File pattern for FastText models must have <%LANG%> pattern as language placeholder",
         "fasttext-%LANG%.bin",
         ReturnTrueCrossValidator(),

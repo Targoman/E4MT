@@ -37,15 +37,19 @@ namespace Apps {
 clsFormalityChecker::clsFormalityChecker()
 {
     quint8 LangIndex = gConfigs::FastTextModelPattern.value().indexOf("%LANG%");
-    foreach(QString File, QDir(gConfigs::FastTextModelPath.value()).entryList(QDir::NoDotAndDotDot)){
+    foreach(QString File,
+            QDir(gConfigs::FastTextModelPath.value()).entryList(QDir::Files | QDir::NoDotAndDotDot)){
         QString LangCode = File.mid(LangIndex, 2);
         if(ISO639isValid(LangCode.toLatin1().constData())){
-            TargomanLogInfo(5, "Loading models for: "<<ISO639getName(LangCode.toLatin1 ().constData ()));
+            TargomanLogInfo(5, "Loading FastText models for: "<<ISO639getName(LangCode.toLatin1 ().constData ()));
             stuFastTextHolder& FTI = this->FastTextHolders[LangCode];
-            FTI.FastText->loadModel(
-                    (gConfigs::FastTextModelPath.value() + "/"+ File).toStdString()
-                    );
-            FTI.Loaded = true;
+            if(!FTI.Lock){
+                FTI.Lock = new QMutex;
+                FTI.FastText = new fasttext::FastText;
+                FTI.FastText->loadModel(
+                        (gConfigs::FastTextModelPath.value() + "/"+ File).toStdString()
+                        );
+            }
         }else
             TargomanLogWarn(1, "Discarding invalid FastText model file: "<<File);
     }
@@ -54,8 +58,8 @@ clsFormalityChecker::clsFormalityChecker()
 QString clsFormalityChecker::check(const QString _lang, QString _text)
 {
     stuFastTextHolder& FTI = this->FastTextHolders[_lang];
-    if(FTI.Loaded == false){
-        TargomanLogError("unable to find appribpiate instance for language: "<<_lang);
+    if(FTI.Lock == NULL){
+        TargomanLogError("unable to find appropiate instance for language: "<<_lang);
         return "formal";
     }
 
