@@ -96,7 +96,13 @@ void appE4MT::slotExecute()
                                    ));
                     std::cout<<FormalityChecker->check(gConfigs::Language.value(), Normalized).toUtf8().constData()
                              << "\t"
-                             << Normalized.toUtf8().constData()<<std::endl;
+                             << TargomanTextProcessor::instance().ixml2Text(
+                                                            Normalized,
+                                                            "",
+                                                            false,
+                                                            false,
+                                                            false
+                                                        ).toUtf8().constData()<<std::endl;
                     break;
                 }case enuAppMode::Tokenize:
                     std::cout<<TargomanTextProcessor::instance().ixml2Text(
@@ -109,7 +115,11 @@ void appE4MT::slotExecute()
                                        (gConfigs::NoSpellcorrector.value() ? false : true),
                                        QList<enuTextTags::Type>(),
                                        SentenceBreakReplacements
-                                       )).toUtf8().constData()<<std::endl;
+                                       ),
+                                   "",
+                                   false,
+                                   false,
+                                   false).toUtf8().constData()<<std::endl;
                     break;
                 case enuAppMode::Normalize:
                     std::cout<<TargomanTextProcessor::instance().normalizeText(
@@ -167,11 +177,16 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const Q
                 Lang,
                 _args.value("txt").toString());
 
-
     QVariantMap Args;
     Args.insert("spell",WasSpellCorrected);
     Args.insert("formality", this->FormalityChecker->check(Lang, Text));
-    return stuRPCOutput(Text, Args);
+    return stuRPCOutput(TargomanTextProcessor::instance().ixml2Text(
+                            Text,
+                            Lang,
+                            _args.value("detok",true).toBool(),
+                            _args.value("toHindi",false).toBool(),
+                            false),
+                        Args);
 }
 
 std::tuple<bool, QString> appE4MT::text2Ixml_Helper(const QVariantList &_removalItems,
@@ -221,10 +236,16 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcText2IXML(const QVaria
 Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcIXML2Text(const QVariantMap &_args)
 {
     QString IXML     = _args.value("txt").toString();
+    QString Lang     = _args.value("lang").toString();
+
     if (IXML.isEmpty())
         throw exAppE4MT("Invalid empty text");
 
-    return stuRPCOutput(TargomanTextProcessor::instance().ixml2Text(IXML));
+    return stuRPCOutput(TargomanTextProcessor::instance().ixml2Text(
+                            IXML,
+                            Lang,
+                            _args.value("detok",false).toBool(),
+                            _args.value("toHindi",false).toBool()));
 }
 
 Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcTokenize(const QVariantMap &_args)
