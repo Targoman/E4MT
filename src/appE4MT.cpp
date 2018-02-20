@@ -180,18 +180,18 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const Q
                     Lang,
                     Paragraph);
         WasSpellCorrected |= SpellCorrected;
-        Text+=Normalized + "\n";
+        Text+=TargomanTextProcessor::instance().ixml2Text(
+                    Normalized,
+                    Lang,
+                    _args.value("detok",true).toBool(),
+                    _args.value("toHindi",false).toBool(),
+                    false) + "\n";
     }
 
     QVariantMap Args;
     Args.insert("spell",WasSpellCorrected);
     Args.insert("formality", this->FormalityChecker->check(Lang, Text));
-    return stuRPCOutput(TargomanTextProcessor::instance().ixml2Text(
-                            Text,
-                            Lang,
-                            _args.value("detok",true).toBool(),
-                            _args.value("toHindi",false).toBool(),
-                            false),
+    return stuRPCOutput(Text,
                         Args);
 }
 
