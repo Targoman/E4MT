@@ -39,7 +39,7 @@ private:
     struct stuFastTextHolder{
         QMutex* Lock;
         fasttext::FastText* FastText;
-        stuFastTextHolder(): Lock(NULL)
+        stuFastTextHolder(): Lock(NULL), FastText(NULL)
         {}
         ~stuFastTextHolder(){
             if(Lock)     delete Lock;
