@@ -174,6 +174,10 @@ Targoman::Common::Configuration::stuRPCOutput appE4MT::rpcPreprocessText(const Q
     foreach(const QString& Paragraph, _args.value("txt").toString().split("\n")){
         QString Normalized;
         bool SpellCorrected;
+        if (Paragraph.trimmed().isEmpty()){
+            Text+="\n";
+            continue;
+        }
         std::tie(SpellCorrected, Normalized) = this->text2Ixml_Helper(
                     _args.value("rem").toList(),
                     _args.value("spell",false).toBool(),
