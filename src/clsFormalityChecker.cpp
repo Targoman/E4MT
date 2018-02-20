@@ -22,57 +22,57 @@
  * @author S. Mohammad M. Ziabary <ziabary@targoman.com>
  */
 
-#ifndef TARGOMAN_APPS_APPE4MT_H
-#define TARGOMAN_APPS_APPE4MT_H
-
-#include "libTargomanCommon/clsSafeCoreApplication.h"
-#include "libTargomanCommon/CmdIO.h"
-#include "libTargomanCommon/Configuration/intfRPCExporter.hpp"
-#include "libTargomanCommon/JSONConversationProtocol.h"
+#include <QDir>
+#include <sstream>
+#include <vector>
+#include <QMutexLocker>
 #include "clsFormalityChecker.h"
+#include "Configs.h"
+#include "ISO639.h"
+#include "libTargomanCommon/Logger.h"
 
 namespace Targoman {
 namespace Apps {
 
-class appE4MT : public Common::Configuration::intfRPCExporter
+clsFormalityChecker::clsFormalityChecker()
 {
-    Q_OBJECT
-public:
-    appE4MT(){
-        this->exportMyRPCs();
+    quint8 LangIndex = gConfigs::FastTextModelPattern.value().indexOf("%LANG%");
+    foreach(QString File, QDir(gConfigs::FastTextModelPath.value()).entryList(QDir::NoDotAndDotDot)){
+        QString LangCode = File.mid(LangIndex, 2);
+        if(ISO639isValid(LangCode.toLatin1().constData())){
+            TargomanLogInfo(5, "Loading models for: "<<ISO639getName(LangCode.toLatin1 ().constData ()));
+            stuFastTextHolder& FTI = this->FastTextHolders[LangCode];
+            FTI.FastText->loadModel(
+                    (gConfigs::FastTextModelPath.value() + "/"+ File).toStdString()
+                    );
+            FTI.Loaded = true;
+        }else
+            TargomanLogWarn(1, "Discarding invalid FastText model file: "<<File);
+    }
+}
+
+QString clsFormalityChecker::check(const QString _lang, QString _text)
+{
+    stuFastTextHolder& FTI = this->FastTextHolders[_lang];
+    if(FTI.Loaded == false){
+        TargomanLogError("unable to find appribpiate instance for language: "<<_lang);
+        return "formal";
     }
 
+    std::stringstream SS;
+    SS<<_text.replace("\n"," ").toUtf8().constData()<<"\n";
+    SS.flush();
 
-public slots:
-    void slotExecute();
+    std::vector<std::pair<fasttext::real,std::string>> Predictions;
+    QMutexLocker Locker(FTI.Lock);
 
-private slots:
-    void slotValidateAgent(INOUT QString&        _user,
-                          const QString&        _pass,
-                          const QString&        _ip,
-                          OUTPUT bool&          _canView,
-                          OUTPUT bool&          _canChange);
+    FTI.FastText->predict(SS, 1, Predictions, gConfigs::FastTextThreshold.value());
 
-    void slotPong(QString _ssid, Targoman::Common::stuPong& _pong);
-
-private slots:
-    Common::Configuration::stuRPCOutput rpcNormalize(const QVariantMap&_args);
-    Common::Configuration::stuRPCOutput rpcText2IXML(const QVariantMap&);
-    Common::Configuration::stuRPCOutput rpcIXML2Text(const QVariantMap&);
-    Common::Configuration::stuRPCOutput rpcTokenize(const QVariantMap&);
-    Common::Configuration::stuRPCOutput rpcPreprocessText(const QVariantMap &_args);
-
-private:
-    void processDir(const QString& _dir, const QString &_basePath);
-    void processFile(const QString &_inputFile, const QString& _outFile);
-    QStringList retrieveFileItems(const QString& _filePath);
-    std::tuple<bool, QString> text2Ixml_Helper(const QVariantList &_temovalItems,
-                            bool _useSpellCorrector, QString _language, QString _text);
-
-private:
-    QScopedPointer<clsFormalityChecker> FormalityChecker;
-};
+    if(Predictions.size())
+        return QString(Predictions[0].second.c_str()).replace("__label__","");
+    else
+        return "formal";
+}
 
 }
 }
-#endif // TARGOMAN_APPS_APPE4MT_H

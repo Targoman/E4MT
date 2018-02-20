@@ -63,6 +63,7 @@ public:
     static Common::Configuration::tmplConfigurable<QString>             Language;
     static Common::Configuration::tmplConfigurable<double>              FastTextThreshold;
     static Common::Configuration::tmplConfigurable<FilePath_t>          FastTextModelPath;
+    static Common::Configuration::tmplConfigurable<QString>             FastTextModelPattern;
     static Common::Configuration::tmplConfigurable<FilePath_t>          InputFile;
     static Common::Configuration::tmplConfigurable<FilePath_t>          InputDir;
     static Common::Configuration::tmplConfigurable<FilePath_t>          OutputPath;

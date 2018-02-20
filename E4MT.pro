@@ -35,7 +35,8 @@ HEADERS += \
     fastText/src/qmatrix.h \
     fastText/src/real.h \
     fastText/src/utils.h \
-    fastText/src/vector.h
+    fastText/src/vector.h \
+    src/clsFormalityChecker.h
 
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
 SOURCES += \
@@ -51,7 +52,8 @@ SOURCES += \
     fastText/src/productquantizer.cc \
     fastText/src/qmatrix.cc \
     fastText/src/utils.cc \
-    fastText/src/vector.cc
+    fastText/src/vector.cc \
+    src/clsFormalityChecker.cpp
 
 DependencySearchPaths+=/usr/lib/x86_64-linux-gnu/ # to fix buggy installation location of libxml2 on ubunut and mint
 INCLUDEPATH+=/usr/include/libxml2/ # to fix buggy installation location of libxml2 on ubunut and mint
