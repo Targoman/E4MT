@@ -22,7 +22,7 @@
 
 pushd $(dirname $0)
 
-if [ $1 == "full" ] && [ -z "$3" ]; then
+if [ "$1" == "full" ] && [ -z "$3" ]; then
     echo "third parameter as PREFIX is obligatory when building in full mode"
     exit
 fi
