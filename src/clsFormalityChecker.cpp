@@ -19,7 +19,7 @@
  *                                                                            *
  ******************************************************************************/
 /**
- * @author S. Mohammad M. Ziabary <ziabary@targoman.com>
+ * @author S. Mehran M. Ziabary <ziabary@targoman.com>
  */
 
 #include <QDir>
@@ -27,18 +27,23 @@
 #include <vector>
 #include <QMutexLocker>
 #include "clsFormalityChecker.h"
-#include "Configs.h"
+#include "src/Configs.h"
 #include "ISO639.h"
 #include "libTargomanCommon/Logger.h"
+#include "fastText/src/autotune.h"
+
+namespace fasttext {
+    constexpr int Autotune::kCutoffLimit;
+}
 
 namespace Targoman {
 namespace Apps {
 
 clsFormalityChecker::clsFormalityChecker()
 {
-    quint8 LangIndex = gConfigs::FastTextModelPattern.value().indexOf("%LANG%");
+    int LangIndex = gConfigs::Classifier::ModelPattern.value().indexOf("%LANG%");
     foreach(QString File,
-            QDir(gConfigs::FastTextModelPath.value()).entryList(QDir::Files | QDir::NoDotAndDotDot)){
+            QDir(gConfigs::Classifier::ModelPath.value()).entryList(QDir::Files | QDir::NoDotAndDotDot)){
         QString LangCode = File.mid(LangIndex, 2);
         if(ISO639isValid(LangCode.toLatin1().constData())){
             TargomanLogInfo(5, "Loading FastText models for: "<<ISO639getName(LangCode.toLatin1 ().constData ()));
@@ -47,7 +52,7 @@ clsFormalityChecker::clsFormalityChecker()
                 FTI.Lock = new QMutex;
                 FTI.FastText = new fasttext::FastText;
                 FTI.FastText->loadModel(
-                        (gConfigs::FastTextModelPath.value() + "/"+ File).toStdString()
+                        (gConfigs::Classifier::ModelPath.value() + "/"+ File).toStdString()
                         );
             }
         }else
@@ -58,8 +63,8 @@ clsFormalityChecker::clsFormalityChecker()
 QString clsFormalityChecker::check(const QString _lang, QString _text)
 {
     stuFastTextHolder& FTI = this->FastTextHolders[_lang];
-    if(FTI.Lock == NULL){
-        TargomanLogError("unable to find appropiate instance for language: "<<_lang);
+    if(FTI.Lock == nullptr){
+        TargomanLogError("unable to find appropiate classifier for language: "<<_lang);
         return "formal";
     }
 
@@ -70,7 +75,7 @@ QString clsFormalityChecker::check(const QString _lang, QString _text)
     std::vector<std::pair<fasttext::real,std::string>> Predictions;
     QMutexLocker Locker(FTI.Lock);
 
-    FTI.FastText->predict(SS, 1, Predictions, gConfigs::FastTextThreshold.value());
+    FTI.FastText->predictLine(SS, Predictions, 1, static_cast<float>(gConfigs::Classifier::Threshold.value()));
 
     if(Predictions.size())
         return QString(Predictions[0].second.c_str()).replace("__label__","");

@@ -46,7 +46,7 @@ void appE4MT::slotExecute()
         if (gConfigs::BreakLines.value())
             SentenceBreakReplacements.append(
                         stuIXMLReplacement(
-                            QRegExp("(\\s)([\\.\\?\\!])(\\s)"),
+                            QRegularExpression("(\\s)([\\.\\?\\!])(\\s)"),
                             "\\1\\2\n\\3"));
 
         if (gConfigs::Mode.value() == enuAppMode::Server){

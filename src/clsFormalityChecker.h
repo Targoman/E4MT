@@ -19,7 +19,7 @@
  *                                                                            *
  ******************************************************************************/
 /**
- * @author S. Mohammad M. Ziabary <ziabary@targoman.com>
+ * @author S. Mehran M. Ziabary <ziabary@targoman.com>
  */
 
 #ifndef CLSFORMALITYCHECKER_H

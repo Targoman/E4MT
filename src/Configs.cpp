@@ -84,7 +84,7 @@ tmplConfigurable<FilePath_t>     gConfigs::InputFile(
             enuConfigSource::Arg  |
             enuConfigSource::File));
 
-tmplConfigurable<double>     gConfigs::FastTextThreshold(
+tmplConfigurable<double>     gConfigs::Classifier::Threshold(
         gConfigs::appConfig("FastTextThreshold"),
         "Threshold to be used by classifier",
         0.8,
@@ -96,7 +96,7 @@ tmplConfigurable<double>     gConfigs::FastTextThreshold(
             enuConfigSource::Arg  |
             enuConfigSource::File));
 
-tmplConfigurable<FilePath_t>     gConfigs::FastTextModelPath(
+tmplConfigurable<FilePath_t>     gConfigs::Classifier::ModelPath(
         gConfigs::appConfig("FastTextModelPath"),
         "Directory where FastText models are stored.",
         "",
@@ -110,7 +110,7 @@ tmplConfigurable<FilePath_t>     gConfigs::FastTextModelPath(
             enuConfigSource::Arg  |
             enuConfigSource::File));
 
-tmplConfigurable<QString> gConfigs::FastTextModelPattern(
+tmplConfigurable<QString> gConfigs::Classifier::ModelPattern(
         gConfigs::appConfig("FastTextModelPattern"),
         "File pattern for FastText models must have <%LANG%> pattern as language placeholder",
         "fasttext-%LANG%.bin",

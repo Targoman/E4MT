@@ -61,9 +61,11 @@ public:
     static Common::Configuration::tmplConfigurable<enuAppMode::Type>    Mode;
     static Common::Configuration::tmplConfigurable<QString>             Input;
     static Common::Configuration::tmplConfigurable<QString>             Language;
-    static Common::Configuration::tmplConfigurable<double>              FastTextThreshold;
-    static Common::Configuration::tmplConfigurable<FilePath_t>          FastTextModelPath;
-    static Common::Configuration::tmplConfigurable<QString>             FastTextModelPattern;
+    struct Classifier{
+    static Common::Configuration::tmplConfigurable<double>              Threshold;
+    static Common::Configuration::tmplConfigurable<FilePath_t>          ModelPath;
+    static Common::Configuration::tmplConfigurable<QString>             ModelPattern;
+    };
     static Common::Configuration::tmplConfigurable<FilePath_t>          InputFile;
     static Common::Configuration::tmplConfigurable<FilePath_t>          InputDir;
     static Common::Configuration::tmplConfigurable<FilePath_t>          OutputPath;

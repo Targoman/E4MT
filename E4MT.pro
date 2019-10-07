@@ -25,14 +25,17 @@ HEADERS += \
     src/appE4MT.h \
     src/Configs.h \
     src/XMLReader.h \
-    fastText/src/dictionary.h \
     fastText/src/args.h \
+    fastText/src/autotune.h \
+    fastText/src/densematrix.h \
     fastText/src/dictionary.h \
     fastText/src/fasttext.h \
+    fastText/src/loss.h \
     fastText/src/matrix.h \
+    fastText/src/meter.h \
     fastText/src/model.h \
     fastText/src/productquantizer.h \
-    fastText/src/qmatrix.h \
+    fastText/src/quantmatrix.h \
     fastText/src/real.h \
     fastText/src/utils.h \
     fastText/src/vector.h \
@@ -45,12 +48,16 @@ SOURCES += \
     src/Configs.cpp \
     src/XMLReader.cpp \
     fastText/src/args.cc \
+    fastText/src/autotune.cc \
+    fastText/src/densematrix.cc \
     fastText/src/dictionary.cc \
     fastText/src/fasttext.cc \
+    fastText/src/loss.cc \
     fastText/src/matrix.cc \
+    fastText/src/meter.cc \
     fastText/src/model.cc \
     fastText/src/productquantizer.cc \
-    fastText/src/qmatrix.cc \
+    fastText/src/quantmatrix.cc \
     fastText/src/utils.cc \
     fastText/src/vector.cc \
     src/clsFormalityChecker.cpp
