@@ -25,6 +25,7 @@ VERSION=2.0.0
 ProjectDependencies+=TargomanCommon \
                      TargomanTextProcessor \
                      xml2
+QMAKE_CXXFLAGS += -Wno-unknown-pragmas
 
 ################################################################################
 #                       DO NOT CHANGE ANYTHING BELOW                           #

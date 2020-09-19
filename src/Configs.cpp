@@ -39,9 +39,8 @@ tmplConfigurable<enuAppMode::Type> gConfigs::Mode(
         "m",
         "ApplicationMode",
         "mode",
-        (enuConfigSource::Type)(
-            enuConfigSource::Arg  |
-            enuConfigSource::File));
+        enuConfigSource::Arg  |
+        enuConfigSource::File);
 
 tmplConfigurable<QString> gConfigs::Language(
         gConfigs::appConfig("Language"),
@@ -56,9 +55,8 @@ tmplConfigurable<QString> gConfigs::Language(
         "l",
         "LANGUAGE",
         "lang",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<QString> gConfigs::Input(
         gConfigs::appConfig("Input"),
@@ -75,14 +73,14 @@ tmplConfigurable<FilePath_t>     gConfigs::InputFile(
         "Input file path to convert. Relative to config file path unless specified as absolute path.",
         "",
         Validators::tmplPathAccessValidator<
-        (enuPathAccess::Type)(enuPathAccess::File | enuPathAccess::Readable),
+        TARGOMAN_PATH_ACCESS(enuPathAccess::File | enuPathAccess::Readable),
         false>,
         "f",
         "FILEPATH",
         "input-file",
-        (enuConfigSource::Type)(
+
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<double>     gConfigs::Classifier::Threshold(
         gConfigs::appConfig("FastTextThreshold"),
@@ -92,23 +90,21 @@ tmplConfigurable<double>     gConfigs::Classifier::Threshold(
         "",
         "",
         "fasttext-threshold",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<FilePath_t>     gConfigs::Classifier::ModelPath(
         gConfigs::appConfig("FastTextModelPath"),
         "Directory where FastText models are stored.",
         "",
         Validators::tmplPathAccessValidator<
-        (enuPathAccess::Type)(enuPathAccess::Dir | enuPathAccess::Readable),
+        TARGOMAN_PATH_ACCESS(enuPathAccess::Dir | enuPathAccess::Readable),
         false>,
         "",
         "",
         "fasttext-models-path",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<QString> gConfigs::Classifier::ModelPattern(
         gConfigs::appConfig("FastTextModelPattern"),
@@ -118,23 +114,21 @@ tmplConfigurable<QString> gConfigs::Classifier::ModelPattern(
         "",
         "",
         "fasttext-model-pattrn",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<FilePath_t>     gConfigs::InputDir(
         gConfigs::appConfig("InputDir"),
         "Input directory to convert. Relative to config file path unless specified as absolute path.",
         "",
         Validators::tmplPathAccessValidator<
-        (enuPathAccess::Type)(enuPathAccess::Dir | enuPathAccess::Readable),
+        TARGOMAN_PATH_ACCESS(enuPathAccess::Dir | enuPathAccess::Readable),
         false>,
         "d",
         "PATH",
         "input-dir",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<FilePath_t>     gConfigs::OutputPath(
         gConfigs::appConfig("Output"),
@@ -143,11 +137,11 @@ tmplConfigurable<FilePath_t>     gConfigs::OutputPath(
         [] (const intfConfigurable& _item, QString& _errorMessage){
             if (gConfigs::InputDir.value().size())
                 return  Validators::tmplPathAccessValidator<
-                        (enuPathAccess::Type)(enuPathAccess::Dir | enuPathAccess::Writeatble),false>(
+                        TARGOMAN_PATH_ACCESS(enuPathAccess::Dir | enuPathAccess::Writeatble),false>(
                             _item, _errorMessage);
             else if (gConfigs::InputFile.value().size())
                 return  Validators::tmplPathAccessValidator<
-                        (enuPathAccess::Type)(enuPathAccess::File | enuPathAccess::Writeatble), false>(
+                        TARGOMAN_PATH_ACCESS(enuPathAccess::File | enuPathAccess::Writeatble), false>(
                             _item, _errorMessage);
             else if (_item.toVariant().toString().isEmpty())
                 return true;
@@ -157,9 +151,8 @@ tmplConfigurable<FilePath_t>     gConfigs::OutputPath(
         "o",
         "PATH",
         "output",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<QWildCard>     gConfigs::IncludePattern(
         gConfigs::appConfig("IncludePattern"),
@@ -169,9 +162,8 @@ tmplConfigurable<QWildCard>     gConfigs::IncludePattern(
         "p",
         "PTRN",
         "pattern",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<bool>     gConfigs::Overwrite(
         gConfigs::appConfig("Overwrite"),
@@ -181,9 +173,8 @@ tmplConfigurable<bool>     gConfigs::Overwrite(
         "w",
         "",
         "overwrite",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<bool>     gConfigs::Interactive(
         gConfigs::appConfig("Interactive"),
@@ -193,9 +184,8 @@ tmplConfigurable<bool>     gConfigs::Interactive(
         "",
         "",
         "interactive",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<bool>     gConfigs::NoSpellcorrector(
         gConfigs::appConfig("DontUseSpellcorrector"),
@@ -205,9 +195,8 @@ tmplConfigurable<bool>     gConfigs::NoSpellcorrector(
         "",
         "",
         "no-spellcorrect",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 
 tmplConfigurable<bool>     gConfigs::Recursive(
@@ -218,9 +207,8 @@ tmplConfigurable<bool>     gConfigs::Recursive(
         "r",
         "",
         "recursive",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 
 tmplConfigurable<bool>     gConfigs::PlainText(
@@ -231,9 +219,8 @@ tmplConfigurable<bool>     gConfigs::PlainText(
         "t",
         "",
         "plaintext",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<bool>     gConfigs::BreakLines(
         gConfigs::appConfig("BreakLines"),
@@ -243,9 +230,8 @@ tmplConfigurable<bool>     gConfigs::BreakLines(
         "n",
         "",
         "breaklines",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<bool>     gConfigs::KeepTitles(
         gConfigs::appConfig("KeepTitles"),
@@ -255,23 +241,21 @@ tmplConfigurable<bool>     gConfigs::KeepTitles(
         "k",
         "",
         "keeptitles",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 tmplConfigurable<FilePath_t>     gConfigs::DTDFilePath(
         gConfigs::appConfig("DTDFilePath"),
         "DTD file used to validate XML Files",
         "",
         Validators::tmplPathAccessValidator<
-        (enuPathAccess::Type)(enuPathAccess::Dir | enuPathAccess::Writeatble),
+        TARGOMAN_PATH_ACCESS(enuPathAccess::Dir | enuPathAccess::Writeatble),
         false>,
         "",
         "DTD_Path",
         "dtd",
-        (enuConfigSource::Type)(
             enuConfigSource::Arg  |
-            enuConfigSource::File));
+            enuConfigSource::File);
 
 }}
 /**************************************************************************************************************/
