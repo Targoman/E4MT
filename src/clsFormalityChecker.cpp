@@ -32,9 +32,9 @@
 #include "libTargomanCommon/Logger.h"
 #include "fastText/src/autotune.h"
 
-namespace fasttext {
-    constexpr int Autotune::kCutoffLimit;
-}
+//namespace fasttext {
+//    constexpr int Autotune::kCutoffLimit;
+//}
 
 namespace Targoman {
 namespace Apps {
