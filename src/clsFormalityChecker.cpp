@@ -45,7 +45,9 @@ clsFormalityChecker::clsFormalityChecker()
     foreach(QString File,
             QDir(gConfigs::Classifier::ModelPath.value()).entryList(QDir::Files | QDir::NoDotAndDotDot)){
         QString LangCode = File.mid(LangIndex, 2);
-        if(ISO639isValid(LangCode.toLatin1().constData())){
+        QString Prefix = gConfigs::Classifier::ModelPattern.value().mid(0, LangIndex);
+        QString Postfix = gConfigs::Classifier::ModelPattern.value().mid(LangIndex + static_cast<int>(sizeof("%LANG%")));
+        if(File.startsWith(Prefix) && File.endsWith(Postfix) && ISO639isValid(LangCode.toLatin1().constData())){
             TargomanLogInfo(5, "Loading FastText models for: "<<ISO639getName(LangCode.toLatin1 ().constData ()));
             stuFastTextHolder& FTI = this->FastTextHolders[LangCode];
             if(!FTI.Lock){
