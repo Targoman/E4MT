@@ -6,7 +6,7 @@
 #   Redistribution and use in source and binary forms are allowed under the
 #   terms of BSD License 2.0.
 ################################################################################
-include (./qmake/appConfigs.pri)
+include ($$QBUILD_PATH/templates/appConfigs.pri)
 
 # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-#
 HEADERS += \
