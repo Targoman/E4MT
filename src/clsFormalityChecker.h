@@ -28,7 +28,7 @@
 #include <QMap>
 #include <QMutex>
 #include <QScopedPointer>
-#include "fastText/src/fasttext.h"
+#include "fasttext/fasttext.h"
 
 namespace Targoman {
 namespace Apps {

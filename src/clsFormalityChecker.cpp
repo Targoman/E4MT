@@ -30,7 +30,7 @@
 #include "src/Configs.h"
 #include "ISO639.h"
 #include "libTargomanCommon/Logger.h"
-#include "fastText/src/autotune.h"
+#include "fasttext/autotune.h"
 
 //namespace fasttext {
 //    constexpr int Autotune::kCutoffLimit;

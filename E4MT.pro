@@ -59,3 +59,4 @@ OTHER_FILES += \
 # to fix buggy installation location of libxml2 on ubunut and mint
 DependencySearchPaths+=/usr/lib/x86_64-linux-gnu/
 INCLUDEPATH+=/usr/include/libxml2/
+

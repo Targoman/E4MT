@@ -19,7 +19,6 @@ LIBS += -lz \
 QT+= core network
 QT -= gui
 QMAKE_CXXFLAGS += -Wno-unknown-pragmas
-INCLUDEPATH += 3rdParty
 
 CONFIG += create_prl
 CONFIG += link_prl
