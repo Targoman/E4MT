@@ -19,7 +19,6 @@ Different authors have different manners of dealing with these words. Some use "
 ********************************
 
 
-
 # Sample codes
 
 After building E4MT, according to [setup](#setup), it can be used on Linux by executing the following commands:
@@ -72,7 +71,17 @@ Follow the steps below to compile the project:
     ```
 3.  The project is a standard QMake out-of-source build, which on Linux can be compiled by executing the following commands:
     ```bash
-    qmake
+    qmake 
+    make -j
+    ```
+    In order to compile in debug mode:
+    ```bash
+    qmake CONFIG+=debug
+    make -j
+    ```
+    If you dont't need server mode: 
+    ```bash
+    qmake QJsonRPC=0
     make -j
     ```
 # License
