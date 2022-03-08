@@ -24,7 +24,7 @@ Different authors have different manners of dealing with these words. Some use "
 After building E4MT, according to [setup](#setup), it can be used on Linux by executing the following commands:
 ```bash
 export E4MTBinPath=E4MT/out/bin
-export LD_LIBRARY_PATH=$E4MTBinPath/../lib
+export LD_LIBRARY_PATH=$E4MTBinPath/../lib64
 $E4MTBinPath/E4MT -f /path/to/input/file -o /path/to/output/file -l fa -c scripts/E4MT.conf
 ```
 Possible [options] can be found by:
@@ -41,7 +41,7 @@ $E4MTBinPath/E4MT -h
 
   A module for correcting common Persian spelling mistakes. Modifications include:
     * Identify compound words and separate their parts using "zwnj" character. (Using predefined lists containing verb stems, adjectives, adverbs, and nouns, the spell correction module examines n-grams present in the sentence to determine   if it can be decomposed using any valid inflection rule. The identified segments are then concatenated using "zwnj" character.)
-    * Correction of common spelling mistakes in Persian language like "سپاسگذار" instead of "سپاسگزار".
+    * Correction of common spelling mistakes in Persian language.
     * Correction of some common spelling mistakes frequently encountered in Persian digital contents. For example, a common mistake in building PDF from Persian documents is that glyph of characters are saved instead of their Unicodes.
   
 * Entity tagging
