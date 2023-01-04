@@ -1,5 +1,7 @@
 # E4MT
-An Essential text processor for Machine translation task
+An Essential text processor for Machine Translation task.
+
+A Python wrapper for E4MT is also available (https://github.com/Targoman/E4MTPy).
 
 ### Table of contents
 - [Motivation](#motivation)
@@ -14,7 +16,7 @@ Text preparation is an essential step in training NLP models. This preparation c
 Dealing with Persian language, a series of basic text preparations are required. Normalizing characters is one of them. Since, the Persian alphabet is based on the Arabic alphabet as do many other middle eastern languages, many non-Persian characters have been entered into Persian written text. This causes the same Persian entity to have different written forms which enlarges the vocabulary size of the Persian language.
 
 Another preparation is related to the polymorphic nature of the Persian language. Persian is an agglutinative language and contains a large number of compound words that consist of a base and one or more affixes. 
-Different authors have different manners of dealing with these words. Some use "zwnj"(zero-width non-joiner<0x200c>) character as delimiter between base and affix, some use space character as delimiter and some concatenate the affixes to the base. Again, this cause the same Persian entity to have different written forms. We handle such issues in E4MT. More details can be found in our [paper]().
+Different authors have different manners of dealing with these words. Some use "zwnj"(zero-width non-joiner<0x200c>) character as delimiter between base and affix, some use space character as delimiter and some concatenate the affixes to the base. Again, this cause the same Persian entity to have different written forms. We handle such issues in E4MT. More details can be found in our [paper](https://ieeexplore.ieee.org/document/9960087).
 
 ********************************
 
@@ -35,12 +37,12 @@ $E4MTBinPath/E4MT -h
 # Features
 * Normalization
 
-  E4MT normalizer converts different forms of characters to their canonical form. This operation covers the all UTF-8 2-byte characters. For example, the Persian   letter “ ‫ك‬ ” has 32 different Unicodes!)
+  E4MT normalizer converts different forms of characters to their canonical form. This operation covers the all UTF-8 2-byte characters. For example, the Persian   letter “ ‫ك‬ ” has 32 different Unicodes!
   
 * Spell correction 
 
   A module for correcting common Persian spelling mistakes. Modifications include:
-    * Identify compound words and separate their parts using "zwnj" character. (Using predefined lists containing verb stems, adjectives, adverbs, and nouns, the spell correction module examines n-grams present in the sentence to determine   if it can be decomposed using any valid inflection rule. The identified segments are then concatenated using "zwnj" character.)
+    * Identify compound words and separate their parts using "zwnj" character (Using predefined lists containing verb stems, adjectives, adverbs, and nouns, the spell correction module examines n-grams present in the sentence to determine if it can be decomposed using any valid inflection rule. The identified segments are then concatenated using "zwnj" character).
     * Correction of common spelling mistakes in Persian language.
     * Correction of some common spelling mistakes frequently encountered in Persian digital contents. For example, a common mistake in building PDF from Persian documents is that glyph of characters are saved instead of their Unicodes.
   
